@@ -6,6 +6,7 @@ def ldpc_decode(H, Ln, max_iter):
     
     # Initialize messages
     L_nm = np.tile(Ln, (M, 1))
+    L_mn = np.zeros((M, N))
     
     for iter in range(max_iter):
         # Check Node to Variable Node Step
@@ -15,6 +16,7 @@ def ldpc_decode(H, Ln, max_iter):
                 L_mn[m, n] = 2 * np.arctanh(prod / np.tanh(L_nm[m, n] / 2))
         
         # Variable Node to Check Node Step
+        for n in range(N):
             for m in np.where(H[:, n])[0]:
                 L_nm[m, n] = Ln[n] + np.sum(L_mn[H[:, n] == 1, n]) - L_mn[m, n]
         
